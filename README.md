@@ -1,36 +1,93 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Plan Semanal de Producción - AGRANA Fruit
 
-## Getting Started
+Aplicación web para gestión de plan semanal de producción desarrollada con Next.js 14, TypeScript y Tailwind CSS.
 
-First, run the development server:
+## 🚀 Inicio Rápido
+
+### Instalación
+
+```bash
+npm install
+```
+
+### Desarrollo
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Abre [http://localhost:3000](http://localhost:3000) en tu navegador.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+### Build para Producción
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+```bash
+npm run build
+npm start
+```
 
-## Learn More
+## 📁 Estructura del Proyecto
 
-To learn more about Next.js, take a look at the following resources:
+```
+├── app/                    # App Router de Next.js
+│   ├── admin/             # Vistas de administración
+│   │   ├── dashboard/     # Dashboard principal
+│   │   ├── linea/         # Detalle de línea
+│   │   └── orden/         # Detalle de orden
+│   ├── maquina/           # Vistas de operario
+│   │   └── [maquinaId]/   # Menú y reportes por máquina
+│   ├── layout.tsx         # Layout principal
+│   ├── page.tsx           # Página de inicio (redirige a dashboard)
+│   └── globals.css        # Estilos globales
+├── components/            # Componentes reutilizables
+│   ├── Breadcrumb.tsx     # Navegación breadcrumb
+│   └── Toast.tsx          # Sistema de notificaciones
+├── context/               # Context API de React
+│   └── AppContext.tsx     # Estado global de la aplicación
+└── public/                # Archivos estáticos
+```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## 🎯 Características
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+- ✅ Dashboard con KPIs y Gantt semanal
+- ✅ Gestión de líneas de producción
+- ✅ Seguimiento de órdenes y lotes
+- ✅ Registro de producción desde máquinas
+- ✅ Registro de paradas
+- ✅ Sistema de alertas
+- ✅ Diseño responsive (mobile/tablet/desktop)
+- ✅ Modo light con estilo industrial moderno
 
-## Deploy on Vercel
+## 🛠️ Tecnologías
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+- **Next.js 14** - Framework React con App Router
+- **TypeScript** - Tipado estático
+- **Tailwind CSS** - Estilos utility-first
+- **React Context** - Gestión de estado global
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## 📱 Rutas Disponibles
+
+- `/admin/dashboard` - Dashboard principal
+- `/admin/linea/[lineaId]` - Detalle de línea
+- `/admin/orden/[ordenId]` - Detalle de orden
+- `/maquina/[maquinaId]` - Menú de operario
+- `/maquina/[maquinaId]/produccion` - Reportar producción
+- `/maquina/[maquinaId]/parada` - Reportar parada
+
+## 🚢 Deploy en Vercel
+
+1. Conecta tu repositorio a Vercel
+2. Vercel detectará automáticamente Next.js
+3. El deploy se realizará automáticamente
+
+O usando CLI:
+
+```bash
+npm i -g vercel
+vercel
+```
+
+## 📝 Notas
+
+- Los datos son simulados y se mantienen en memoria (estado React)
+- Para producción, conectar con backend real
+- Diseño optimizado para tablets y pantallas grandes
