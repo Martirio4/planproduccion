@@ -250,6 +250,24 @@ export const initialState: AppState = {
       turno: 'Mañana',
       objetivoTurno: 2000,
       producidoActual: 7200
+    },
+    'LINEA_B_05': {
+      id: 'LINEA_B_05',
+      lineaId: 'LINEA_B',
+      ordenId: 'FR-350',
+      producto: 'Concentrado Manzana',
+      turno: 'Tarde',
+      objetivoTurno: 2500,
+      producidoActual: 8500
+    },
+    'LINEA_C_08': {
+      id: 'LINEA_C_08',
+      lineaId: 'LINEA_C',
+      ordenId: 'FR-355',
+      producto: 'Envasado Pulpa 1L',
+      turno: 'Mañana',
+      objetivoTurno: 1800,
+      producidoActual: 7500
     }
   }
 }

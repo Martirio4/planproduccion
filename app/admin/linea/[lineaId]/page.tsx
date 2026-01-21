@@ -264,6 +264,20 @@ export default function LineaPage({ params }: { params: Promise<{ lineaId: strin
       </div>
 
       <div className="card mb-8">
+        <div className="mb-6 pb-4 border-b-2" style={{ borderColor: theme === 'dark' ? '#374151' : '#e5e7eb' }}>
+          <h3 
+            className="text-xl font-semibold mb-1"
+            style={{ color: theme === 'dark' ? '#f9fafb' : '#111827' }}
+          >
+            Órdenes de Producción
+          </h3>
+          <p 
+            className="text-sm"
+            style={{ color: theme === 'dark' ? '#9ca3af' : '#6b7280' }}
+          >
+            Haz clic en una orden para ver el detalle
+          </p>
+        </div>
         <div className="overflow-x-auto">
           <table className="w-full border-collapse">
             <thead>

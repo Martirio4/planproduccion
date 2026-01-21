@@ -233,12 +233,20 @@ export default function DashboardPage() {
 
       <div className="card mb-8">
         <div className="flex justify-between items-center mb-6 pb-4 border-b-2 border-gray-200 dark:border-gray-700">
-          <h3 
-            className="text-xl font-semibold"
-            style={{ color: theme === 'dark' ? '#f9fafb' : '#111827' }}
-          >
-            Programación Semanal por Línea
-          </h3>
+          <div>
+            <h3 
+              className="text-xl font-semibold mb-1"
+              style={{ color: theme === 'dark' ? '#f9fafb' : '#111827' }}
+            >
+              Programación Semanal por Línea
+            </h3>
+            <p 
+              className="text-sm"
+              style={{ color: theme === 'dark' ? '#9ca3af' : '#6b7280' }}
+            >
+              Haz clic en una línea para ver el detalle de órdenes de producción
+            </p>
+          </div>
           <div className="flex items-center gap-2">
             <button
               onClick={() => setViewMode('gantt')}

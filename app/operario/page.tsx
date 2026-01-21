@@ -34,114 +34,94 @@ export default function OperarioPage() {
     <div>
       <div className="mb-8">
         <h2 
-          className="text-3xl font-bold mb-2"
+          className="text-3xl font-bold mb-1"
           style={{ color: theme === 'dark' ? '#f9fafb' : '#111827' }}
         >
           Vista Operario
         </h2>
         <p 
-          className="mb-4"
-          style={{ color: theme === 'dark' ? '#9ca3af' : '#374151' }}
+          className="mb-4 text-sm"
+          style={{ color: theme === 'dark' ? '#9ca3af' : '#6b7280' }}
         >
-          Seleccione una máquina para ver sus órdenes
+          Haz clic en una máquina para ver sus órdenes de producción
         </p>
         <Link href="/" className="btn btn-secondary">
           ← Volver al inicio
         </Link>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {maquinasDisponibles.map((maquina) => {
+      <div>
+        {maquinasDisponibles.map((maquina, index) => {
           const linea = state.lineas[maquina.lineaId]
           const orden = state.ordenes[maquina.ordenId]
+          
+          // Colores para las máquinas (similar a las líneas)
+          const colores = [
+            { from: '#8B5CF6', to: '#7C3AED' }, // Púrpura
+            { from: '#3B82F6', to: '#2563EB' }, // Azul
+            { from: '#F59E0B', to: '#D97706' }, // Ámbar
+          ]
+          const color = colores[index % colores.length]
+          
+          // Calcular progreso basado en producido vs objetivo
+          const progreso = maquina.objetivoTurno > 0 
+            ? Math.min(100, (maquina.producidoActual / maquina.objetivoTurno) * 100)
+            : 0
           
           return (
             <Link
               key={maquina.id}
               href={`/operario/maquina/${maquina.id}`}
-              className="card cursor-pointer hover:border-[#14B8A6] hover:shadow-lg hover:-translate-y-1 transition-all"
+              className="block p-5 mb-4 rounded-lg cursor-pointer transition-all hover:shadow-md hover:-translate-y-0.5"
+              style={{ 
+                borderLeftColor: color.from, 
+                borderLeftWidth: '6px',
+                backgroundColor: theme === 'dark' ? '#1f2937' : '#ffffff',
+                borderTop: theme === 'dark' ? '2px solid #4b5563' : '2px solid #e5e7eb',
+                borderRight: theme === 'dark' ? '2px solid #4b5563' : '2px solid #e5e7eb',
+                borderBottom: theme === 'dark' ? '2px solid #4b5563' : '2px solid #e5e7eb'
+              }}
             >
-              <div className="flex items-center justify-between mb-4">
-                <h3 
-                  className="text-2xl font-bold"
-                  style={{ color: theme === 'dark' ? '#f9fafb' : '#111827' }}
-                >
-                  {maquina.id}
-                </h3>
-                <div className="text-4xl">🔧</div>
-              </div>
-              <div className="space-y-2">
-                <div>
-                  <span 
-                    className="text-sm"
-                    style={{ color: theme === 'dark' ? '#9ca3af' : '#374151' }}
-                  >
-                    Línea:
-                  </span>
+              <div className="flex justify-between items-center">
+                <div className="flex-1">
                   <div 
-                    className="font-semibold"
-                    style={{ color: theme === 'dark' ? '#e5e7eb' : '#111827' }}
+                    className="text-lg font-semibold mb-2"
+                    style={{ color: theme === 'dark' ? '#f9fafb' : '#111827' }}
                   >
-                    {linea?.nombre || 'Sin línea'}
+                    {linea?.nombre || maquina.id}
+                  </div>
+                  <div className="flex items-center gap-4 text-sm">
+                    {orden && (
+                      <span 
+                        style={{ color: theme === 'dark' ? '#9ca3af' : '#6b7280' }}
+                      >
+                        {orden.producto}
+                      </span>
+                    )}
+                    <span 
+                      style={{ color: theme === 'dark' ? '#9ca3af' : '#6b7280' }}
+                    >
+                      Turno: {maquina.turno}
+                    </span>
+                    <span 
+                      style={{ color: theme === 'dark' ? '#9ca3af' : '#6b7280' }}
+                    >
+                      {formatNumber(maquina.producidoActual)} kg
+                    </span>
                   </div>
                 </div>
-                <div>
-                  <span 
-                    className="text-sm"
-                    style={{ color: theme === 'dark' ? '#9ca3af' : '#374151' }}
-                  >
-                    Orden Actual:
-                  </span>
-                  <div 
-                    className="font-semibold"
-                    style={{ color: theme === 'dark' ? '#e5e7eb' : '#111827' }}
-                  >
+                <div className="text-right ml-4">
+                  <div className="text-base font-bold" style={{ color: color.from }}>
                     {orden ? orden.id : 'Sin orden'}
                   </div>
-                </div>
-                {orden && (
-                  <div>
-                    <span 
-                      className="text-sm"
-                      style={{ color: theme === 'dark' ? '#9ca3af' : '#374151' }}
-                    >
-                      Producto:
-                    </span>
+                  {orden && (
                     <div 
-                      className="font-semibold"
-                      style={{ color: theme === 'dark' ? '#e5e7eb' : '#111827' }}
+                      className="text-xs mt-1"
+                      style={{ color: theme === 'dark' ? '#9ca3af' : '#6b7280' }}
                     >
-                      {orden.producto}
+                      Orden Actual
                     </div>
-                  </div>
-                )}
-                <div>
-                  <span 
-                    className="text-sm"
-                    style={{ color: theme === 'dark' ? '#9ca3af' : '#374151' }}
-                  >
-                    Turno:
-                  </span>
-                  <div 
-                    className="font-semibold"
-                    style={{ color: theme === 'dark' ? '#e5e7eb' : '#111827' }}
-                  >
-                    {maquina.turno}
-                  </div>
-                </div>
-                <div>
-                  <span 
-                    className="text-sm"
-                    style={{ color: theme === 'dark' ? '#9ca3af' : '#374151' }}
-                  >
-                    Producido:
-                  </span>
-                  <div 
-                    className="font-semibold"
-                    style={{ color: '#14B8A6' }}
-                  >
-                    {formatNumber(maquina.producidoActual)} kg
-                  </div>
+                  )}
                 </div>
               </div>
             </Link>

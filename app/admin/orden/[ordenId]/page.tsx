@@ -55,10 +55,6 @@ export default function OrdenPage({ params }: { params: Promise<{ ordenId: strin
     return map[estado] || 'badge-planned'
   }
 
-  const handleExportar = () => {
-    showToast('Export simulado (CSV/XLS)', 'info')
-  }
-
   return (
     <div>
       <div className="mb-8">
@@ -200,7 +196,7 @@ export default function OrdenPage({ params }: { params: Promise<{ ordenId: strin
             className="text-xl font-semibold"
             style={{ color: theme === 'dark' ? '#f9fafb' : '#111827' }}
           >
-            Registros
+            Registros de Producción y Paradas
           </h3>
         </div>
         <div 
@@ -448,12 +444,6 @@ export default function OrdenPage({ params }: { params: Promise<{ ordenId: strin
             </table>
           </div>
         </div>
-      </div>
-
-      <div className="mt-8">
-        <button onClick={handleExportar} className="btn btn-primary">
-          Exportar (mock)
-        </button>
       </div>
     </div>
   )
