@@ -2,13 +2,22 @@
 
 import { useApp } from '@/context/AppContext'
 import { useToast } from '@/components/Toast'
+import { useTheme } from '@/context/ThemeContext'
+import { usePathname } from 'next/navigation'
+import Link from 'next/link'
 import { useState } from 'react'
 import CargarPlanModal from '@/components/CargarPlanModal'
+import { ThemeSwitch } from '@/components/ThemeSwitch'
 
 export function Navbar() {
   const { state, updateState } = useApp()
   const { showToast } = useToast()
+  const { theme } = useTheme()
+  const pathname = usePathname()
   const [isModalOpen, setIsModalOpen] = useState(false)
+  
+  // Verificar si estamos en modo admin
+  const isAdminMode = pathname?.startsWith('/admin')
 
   const handleSimularCarga = () => {
     updateState((prev) => {
@@ -161,23 +170,55 @@ export function Navbar() {
 
   return (
     <>
-      <header className="bg-white border-b-2 border-gray-200 sticky top-0 z-50 shadow-sm">
+      <header 
+        className="border-b-2 sticky top-0 z-50 shadow-sm"
+        style={{
+          backgroundColor: theme === 'dark' ? '#1f2937' : '#ffffff',
+          borderColor: theme === 'dark' ? '#374151' : '#e5e7eb'
+        }}
+      >
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
           <div className="flex justify-between items-center flex-wrap gap-4">
-            <h1 className="text-2xl font-bold text-gray-800">Plan Semanal de Producción</h1>
-            <div className="flex gap-3">
-              <button 
-                onClick={handleSimularCarga}
+            <h1 
+              className="text-2xl font-bold"
+              style={{ color: theme === 'dark' ? '#f9fafb' : '#111827' }}
+            >
+              Plan Semanal de Producción
+            </h1>
+            <div className="flex gap-3 items-center">
+              {/* Botón para volver a selección - siempre visible */}
+              <Link 
+                href="/"
                 className="btn btn-secondary"
+                style={{
+                  backgroundColor: theme === 'dark' ? '#374151' : '#ffffff',
+                  color: theme === 'dark' ? '#f9fafb' : '#2c3e50',
+                  borderColor: theme === 'dark' ? '#4b5563' : '#e0e4e8'
+                }}
               >
-                Simular carga
-              </button>
-              <button 
-                onClick={handleReset}
-                className="btn btn-secondary"
-              >
-                Reset
-              </button>
+                Inicio
+              </Link>
+              
+              {/* Toggle Dark Mode */}
+              <ThemeSwitch />
+              
+              {/* Botones solo en modo admin */}
+              {isAdminMode && (
+                <>
+                  <button 
+                    onClick={handleSimularCarga}
+                    className="btn btn-secondary"
+                  >
+                    Simular carga
+                  </button>
+                  <button 
+                    onClick={handleReset}
+                    className="btn btn-secondary"
+                  >
+                    Reset
+                  </button>
+                </>
+              )}
             </div>
           </div>
         </div>

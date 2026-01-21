@@ -1,11 +1,13 @@
 'use client'
 
 import { useApp } from '@/context/AppContext'
+import { useTheme } from '@/context/ThemeContext'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 
 export default function OperarioPage() {
   const { state } = useApp()
+  const { theme } = useTheme()
   const router = useRouter()
 
   const formatNumber = (num: number) => {
@@ -31,8 +33,18 @@ export default function OperarioPage() {
   return (
     <div>
       <div className="mb-8">
-        <h2 className="text-3xl font-bold mb-2">Vista Operario</h2>
-        <p className="text-gray-600 mb-4">Seleccione una máquina para ver sus órdenes</p>
+        <h2 
+          className="text-3xl font-bold mb-2"
+          style={{ color: theme === 'dark' ? '#f9fafb' : '#111827' }}
+        >
+          Vista Operario
+        </h2>
+        <p 
+          className="mb-4"
+          style={{ color: theme === 'dark' ? '#9ca3af' : '#374151' }}
+        >
+          Seleccione una máquina para ver sus órdenes
+        </p>
         <Link href="/" className="btn btn-secondary">
           ← Volver al inicio
         </Link>
@@ -50,31 +62,86 @@ export default function OperarioPage() {
               className="card cursor-pointer hover:border-[#14B8A6] hover:shadow-lg hover:-translate-y-1 transition-all"
             >
               <div className="flex items-center justify-between mb-4">
-                <h3 className="text-2xl font-bold">{maquina.id}</h3>
+                <h3 
+                  className="text-2xl font-bold"
+                  style={{ color: theme === 'dark' ? '#f9fafb' : '#111827' }}
+                >
+                  {maquina.id}
+                </h3>
                 <div className="text-4xl">🔧</div>
               </div>
               <div className="space-y-2">
                 <div>
-                  <span className="text-sm text-gray-500">Línea:</span>
-                  <div className="font-semibold">{linea?.nombre || 'Sin línea'}</div>
+                  <span 
+                    className="text-sm"
+                    style={{ color: theme === 'dark' ? '#9ca3af' : '#374151' }}
+                  >
+                    Línea:
+                  </span>
+                  <div 
+                    className="font-semibold"
+                    style={{ color: theme === 'dark' ? '#e5e7eb' : '#111827' }}
+                  >
+                    {linea?.nombre || 'Sin línea'}
+                  </div>
                 </div>
                 <div>
-                  <span className="text-sm text-gray-500">Orden Actual:</span>
-                  <div className="font-semibold">{orden ? orden.id : 'Sin orden'}</div>
+                  <span 
+                    className="text-sm"
+                    style={{ color: theme === 'dark' ? '#9ca3af' : '#374151' }}
+                  >
+                    Orden Actual:
+                  </span>
+                  <div 
+                    className="font-semibold"
+                    style={{ color: theme === 'dark' ? '#e5e7eb' : '#111827' }}
+                  >
+                    {orden ? orden.id : 'Sin orden'}
+                  </div>
                 </div>
                 {orden && (
                   <div>
-                    <span className="text-sm text-gray-500">Producto:</span>
-                    <div className="font-semibold">{orden.producto}</div>
+                    <span 
+                      className="text-sm"
+                      style={{ color: theme === 'dark' ? '#9ca3af' : '#374151' }}
+                    >
+                      Producto:
+                    </span>
+                    <div 
+                      className="font-semibold"
+                      style={{ color: theme === 'dark' ? '#e5e7eb' : '#111827' }}
+                    >
+                      {orden.producto}
+                    </div>
                   </div>
                 )}
                 <div>
-                  <span className="text-sm text-gray-500">Turno:</span>
-                  <div className="font-semibold">{maquina.turno}</div>
+                  <span 
+                    className="text-sm"
+                    style={{ color: theme === 'dark' ? '#9ca3af' : '#374151' }}
+                  >
+                    Turno:
+                  </span>
+                  <div 
+                    className="font-semibold"
+                    style={{ color: theme === 'dark' ? '#e5e7eb' : '#111827' }}
+                  >
+                    {maquina.turno}
+                  </div>
                 </div>
                 <div>
-                  <span className="text-sm text-gray-500">Producido:</span>
-                  <div className="font-semibold text-[#14B8A6]">{formatNumber(maquina.producidoActual)} kg</div>
+                  <span 
+                    className="text-sm"
+                    style={{ color: theme === 'dark' ? '#9ca3af' : '#374151' }}
+                  >
+                    Producido:
+                  </span>
+                  <div 
+                    className="font-semibold"
+                    style={{ color: '#14B8A6' }}
+                  >
+                    {formatNumber(maquina.producidoActual)} kg
+                  </div>
                 </div>
               </div>
             </Link>

@@ -2,6 +2,7 @@ import type { Metadata } from 'next'
 import './globals.css'
 import { AppProvider } from '@/context/AppContext'
 import { ToastProvider } from '@/components/Toast'
+import { ThemeProvider } from '@/context/ThemeContext'
 import { Navbar } from '@/components/Navbar'
 
 export const metadata: Metadata = {
@@ -17,14 +18,16 @@ export default function RootLayout({
   return (
     <html lang="es">
       <body>
-        <AppProvider>
-          <ToastProvider>
-            <Navbar />
-            <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-              {children}
-            </main>
-          </ToastProvider>
-        </AppProvider>
+        <ThemeProvider>
+          <AppProvider>
+            <ToastProvider>
+              <Navbar />
+              <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+                {children}
+              </main>
+            </ToastProvider>
+          </AppProvider>
+        </ThemeProvider>
       </body>
     </html>
   )

@@ -189,13 +189,13 @@ export default function CargarPlanModal({ isOpen, onClose }: CargarPlanModalProp
 
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
-      <div className="bg-white rounded-lg shadow-xl max-w-2xl w-full max-h-[90vh] overflow-y-auto">
-        <div className="p-6 border-b-2 border-gray-200">
+      <div className="bg-white dark:bg-gray-800 rounded-lg shadow-xl max-w-2xl w-full max-h-[90vh] overflow-y-auto">
+        <div className="p-6 border-b-2 border-gray-200 dark:border-gray-700">
           <div className="flex justify-between items-center">
-            <h2 className="text-2xl font-bold">Cargar Plan de Producción</h2>
+            <h2 className="text-2xl font-bold dark:text-gray-100">Cargar Plan de Producción</h2>
             <button
               onClick={onClose}
-              className="text-gray-500 hover:text-gray-700 text-2xl font-bold"
+              className="text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200 text-2xl font-bold"
             >
               ×
             </button>
@@ -205,13 +205,13 @@ export default function CargarPlanModal({ isOpen, onClose }: CargarPlanModalProp
         <form onSubmit={handleSubmit} className="p-6 space-y-6">
           {/* Semana */}
           <div>
-            <label className="block text-sm font-semibold text-gray-700 mb-2">
+            <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
               Semana del Año *
             </label>
             <select
               value={semanaSeleccionada}
               onChange={(e) => setSemanaSeleccionada(parseInt(e.target.value))}
-              className="w-full px-4 py-3 border-2 border-gray-200 rounded-lg focus:border-teal-500 focus:outline-none"
+              className="w-full px-4 py-3 border-2 border-gray-200 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-100 rounded-lg focus:border-teal-500 focus:outline-none"
               required
             >
               {semanas.map((sem) => (
@@ -221,7 +221,7 @@ export default function CargarPlanModal({ isOpen, onClose }: CargarPlanModalProp
               ))}
             </select>
             {semanaInfo && (
-              <p className="mt-1 text-sm text-gray-500">
+              <p className="mt-1 text-sm text-gray-500 dark:text-gray-400">
                 Del {formatDate(semanaInfo.inicio)} al {formatDate(semanaInfo.fin)}
               </p>
             )}
@@ -229,13 +229,13 @@ export default function CargarPlanModal({ isOpen, onClose }: CargarPlanModalProp
 
           {/* Línea */}
           <div>
-            <label className="block text-sm font-semibold text-gray-700 mb-2">
+            <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
               Línea *
             </label>
             <select
               value={lineaId}
               onChange={(e) => setLineaId(e.target.value)}
-              className="w-full px-4 py-3 border-2 border-gray-200 rounded-lg focus:border-teal-500 focus:outline-none"
+              className="w-full px-4 py-3 border-2 border-gray-200 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-100 rounded-lg focus:border-teal-500 focus:outline-none"
               required
             >
               <option value="">Seleccione una línea</option>
@@ -249,14 +249,14 @@ export default function CargarPlanModal({ isOpen, onClose }: CargarPlanModalProp
 
           {/* Producto */}
           <div>
-            <label className="block text-sm font-semibold text-gray-700 mb-2">
+            <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
               Producto *
             </label>
             {lineaId ? (
               <select
                 value={producto}
                 onChange={(e) => setProducto(e.target.value)}
-                className="w-full px-4 py-3 border-2 border-gray-200 rounded-lg focus:border-teal-500 focus:outline-none"
+                className="w-full px-4 py-3 border-2 border-gray-200 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-100 rounded-lg focus:border-teal-500 focus:outline-none"
                 required
               >
                 <option value="">Seleccione un producto</option>
@@ -271,7 +271,7 @@ export default function CargarPlanModal({ isOpen, onClose }: CargarPlanModalProp
                 type="text"
                 value=""
                 disabled
-                className="w-full px-4 py-3 border-2 border-gray-200 rounded-lg bg-gray-100 cursor-not-allowed"
+                className="w-full px-4 py-3 border-2 border-gray-200 dark:border-gray-600 rounded-lg bg-gray-100 dark:bg-gray-700 dark:text-gray-300 cursor-not-allowed"
                 placeholder="Primero seleccione una línea"
               />
             )}
@@ -279,14 +279,14 @@ export default function CargarPlanModal({ isOpen, onClose }: CargarPlanModalProp
 
           {/* Cantidad */}
           <div>
-            <label className="block text-sm font-semibold text-gray-700 mb-2">
+            <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
               Cantidad (kg) *
             </label>
             <input
               type="number"
               value={cantidad}
               onChange={(e) => setCantidad(e.target.value)}
-              className="w-full px-4 py-3 border-2 border-gray-200 rounded-lg focus:border-teal-500 focus:outline-none"
+              className="w-full px-4 py-3 border-2 border-gray-200 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-100 rounded-lg focus:border-teal-500 focus:outline-none"
               placeholder="Ej: 8500"
               min="0"
               step="0.01"
@@ -296,14 +296,14 @@ export default function CargarPlanModal({ isOpen, onClose }: CargarPlanModalProp
 
           {/* Fecha Compromiso */}
           <div>
-            <label className="block text-sm font-semibold text-gray-700 mb-2">
+            <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
               Fecha Compromiso *
             </label>
             <input
               type="date"
               value={fechaCompromiso}
               onChange={(e) => setFechaCompromiso(e.target.value)}
-              className="w-full px-4 py-3 border-2 border-gray-200 rounded-lg focus:border-teal-500 focus:outline-none"
+              className="w-full px-4 py-3 border-2 border-gray-200 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-100 rounded-lg focus:border-teal-500 focus:outline-none"
               required
             />
           </div>

@@ -1,6 +1,7 @@
 'use client'
 
 import { useApp } from '@/context/AppContext'
+import { useTheme } from '@/context/ThemeContext'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 import { useState, useEffect, use } from 'react'
@@ -8,6 +9,7 @@ import { Gauge } from '@/components/Gauge'
 
 export default function LineaPage({ params }: { params: Promise<{ lineaId: string }> }) {
   const { state } = useApp()
+  const { theme } = useTheme()
   const router = useRouter()
   const [filterEstado, setFilterEstado] = useState('todos')
   const [filterTipoEvento, setFilterTipoEvento] = useState<'todos' | 'produccion' | 'paradas'>('todos')
@@ -173,11 +175,24 @@ export default function LineaPage({ params }: { params: Promise<{ lineaId: strin
         <div className="md:col-span-2 space-y-4">
           {/* Plan */}
           <div className="kpi-card">
-            <h4 className="text-sm font-semibold text-gray-500 uppercase tracking-wide mb-3">Plan Línea</h4>
+            <h4 
+              className="text-sm font-semibold uppercase tracking-wide mb-3"
+              style={{ color: theme === 'dark' ? '#9ca3af' : '#374151' }}
+            >
+              Plan Línea
+            </h4>
             <div className="flex items-end justify-between">
-              <div className="text-3xl font-bold text-gray-800">{formatNumber(linea.plan)} t</div>
+              <div 
+                className="text-3xl font-bold"
+                style={{ color: theme === 'dark' ? '#f9fafb' : '#111827' }}
+              >
+                {formatNumber(linea.plan)} t
+              </div>
             </div>
-            <div className="mt-4 w-full h-3 bg-gray-200 rounded-full overflow-hidden">
+            <div 
+              className="mt-4 w-full h-3 rounded-full overflow-hidden"
+              style={{ backgroundColor: theme === 'dark' ? '#374151' : '#e5e7eb' }}
+            >
               <div
                 className="h-full bg-blue-500 rounded-full transition-all"
                 style={{ width: '100%' }}
@@ -187,11 +202,24 @@ export default function LineaPage({ params }: { params: Promise<{ lineaId: strin
           
           {/* Real */}
           <div className="kpi-card">
-            <h4 className="text-sm font-semibold text-gray-500 uppercase tracking-wide mb-3">Real Línea</h4>
+            <h4 
+              className="text-sm font-semibold uppercase tracking-wide mb-3"
+              style={{ color: theme === 'dark' ? '#9ca3af' : '#374151' }}
+            >
+              Real Línea
+            </h4>
             <div className="flex items-end justify-between">
-              <div className="text-3xl font-bold text-gray-800">{formatNumber(linea.real)} t</div>
+              <div 
+                className="text-3xl font-bold"
+                style={{ color: theme === 'dark' ? '#f9fafb' : '#111827' }}
+              >
+                {formatNumber(linea.real)} t
+              </div>
             </div>
-            <div className="mt-4 w-full h-3 bg-gray-200 rounded-full overflow-hidden">
+            <div 
+              className="mt-4 w-full h-3 rounded-full overflow-hidden"
+              style={{ backgroundColor: theme === 'dark' ? '#374151' : '#e5e7eb' }}
+            >
               <div
                 className={`h-full rounded-full transition-all ${
                   linea.cumplimiento >= 80 ? 'bg-green-500' : 
@@ -205,7 +233,12 @@ export default function LineaPage({ params }: { params: Promise<{ lineaId: strin
 
         {/* Gauge de cumplimiento */}
         <div className="kpi-card flex flex-col items-center justify-center">
-          <h4 className="text-sm font-semibold text-gray-500 uppercase tracking-wide mb-4">% Cumplimiento</h4>
+          <h4 
+            className="text-sm font-semibold uppercase tracking-wide mb-4"
+            style={{ color: theme === 'dark' ? '#9ca3af' : '#374151' }}
+          >
+            % Cumplimiento
+          </h4>
           <Gauge 
             porcentaje={linea.cumplimiento} 
             color={cumplimientoColor === 'success' ? '#10B981' : cumplimientoColor === 'warning' ? '#F59E0B' : '#EF4444'}
@@ -234,15 +267,65 @@ export default function LineaPage({ params }: { params: Promise<{ lineaId: strin
         <div className="overflow-x-auto">
           <table className="w-full border-collapse">
             <thead>
-              <tr className="bg-gray-50">
-                <th className="text-left p-4 border-b-2 border-gray-200 font-semibold">Lote/Orden</th>
-                <th className="text-left p-4 border-b-2 border-gray-200 font-semibold">Producto</th>
-                <th className="text-left p-4 border-b-2 border-gray-200 font-semibold">Semana</th>
-                <th className="text-left p-4 border-b-2 border-gray-200 font-semibold">Plan (kg)</th>
-                <th className="text-left p-4 border-b-2 border-gray-200 font-semibold">Real (kg)</th>
+              <tr style={{ backgroundColor: theme === 'dark' ? '#1f2937' : '#f3f4f6' }}>
                 <th 
-                  className="text-left p-4 border-b-2 border-gray-200 font-semibold cursor-pointer hover:bg-gray-100 transition-colors select-none"
+                  className="text-left p-4 border-b-2 font-semibold"
+                  style={{ 
+                    borderColor: theme === 'dark' ? '#374151' : '#d1d5db',
+                    color: theme === 'dark' ? '#e5e7eb' : '#111827'
+                  }}
+                >
+                  Lote/Orden
+                </th>
+                <th 
+                  className="text-left p-4 border-b-2 font-semibold"
+                  style={{ 
+                    borderColor: theme === 'dark' ? '#374151' : '#d1d5db',
+                    color: theme === 'dark' ? '#e5e7eb' : '#111827'
+                  }}
+                >
+                  Producto
+                </th>
+                <th 
+                  className="text-left p-4 border-b-2 font-semibold"
+                  style={{ 
+                    borderColor: theme === 'dark' ? '#374151' : '#d1d5db',
+                    color: theme === 'dark' ? '#e5e7eb' : '#111827'
+                  }}
+                >
+                  Semana
+                </th>
+                <th 
+                  className="text-left p-4 border-b-2 font-semibold"
+                  style={{ 
+                    borderColor: theme === 'dark' ? '#374151' : '#d1d5db',
+                    color: theme === 'dark' ? '#e5e7eb' : '#111827'
+                  }}
+                >
+                  Plan (kg)
+                </th>
+                <th 
+                  className="text-left p-4 border-b-2 font-semibold"
+                  style={{ 
+                    borderColor: theme === 'dark' ? '#374151' : '#d1d5db',
+                    color: theme === 'dark' ? '#e5e7eb' : '#111827'
+                  }}
+                >
+                  Real (kg)
+                </th>
+                <th 
+                  className="text-left p-4 border-b-2 font-semibold cursor-pointer transition-colors select-none"
+                  style={{ 
+                    borderColor: theme === 'dark' ? '#374151' : '#d1d5db',
+                    color: theme === 'dark' ? '#d1d5db' : '#111827'
+                  }}
                   onClick={() => handleSort('progreso')}
+                  onMouseEnter={(e) => {
+                    e.currentTarget.style.backgroundColor = theme === 'dark' ? '#374151' : '#e5e7eb'
+                  }}
+                  onMouseLeave={(e) => {
+                    e.currentTarget.style.backgroundColor = theme === 'dark' ? '#1f2937' : '#f3f4f6'
+                  }}
                 >
                   <div className="flex items-center gap-2">
                     Progreso
@@ -254,8 +337,18 @@ export default function LineaPage({ params }: { params: Promise<{ lineaId: strin
                   </div>
                 </th>
                 <th 
-                  className="text-left p-4 border-b-2 border-gray-200 font-semibold cursor-pointer hover:bg-gray-100 transition-colors select-none"
+                  className="text-left p-4 border-b-2 font-semibold cursor-pointer transition-colors select-none"
+                  style={{ 
+                    borderColor: theme === 'dark' ? '#374151' : '#d1d5db',
+                    color: theme === 'dark' ? '#d1d5db' : '#111827'
+                  }}
                   onClick={() => handleSort('fecha')}
+                  onMouseEnter={(e) => {
+                    e.currentTarget.style.backgroundColor = theme === 'dark' ? '#374151' : '#e5e7eb'
+                  }}
+                  onMouseLeave={(e) => {
+                    e.currentTarget.style.backgroundColor = theme === 'dark' ? '#1f2937' : '#f3f4f6'
+                  }}
                 >
                   <div className="flex items-center gap-2">
                     Fecha Compromiso
@@ -277,22 +370,86 @@ export default function LineaPage({ params }: { params: Promise<{ lineaId: strin
                   <tr
                     key={orden.id}
                     onClick={() => handleOrdenClick(orden.id)}
-                    className="cursor-pointer hover:bg-gray-50 transition-colors"
+                    className="cursor-pointer transition-colors"
+                    style={{ 
+                      backgroundColor: theme === 'dark' ? 'transparent' : 'white'
+                    }}
+                    onMouseEnter={(e) => {
+                      e.currentTarget.style.backgroundColor = theme === 'dark' ? '#1f2937' : '#f9fafb'
+                    }}
+                    onMouseLeave={(e) => {
+                      e.currentTarget.style.backgroundColor = theme === 'dark' ? 'transparent' : 'white'
+                    }}
                   >
-                    <td className="p-4 border-b border-gray-200"><strong>{orden.id}</strong></td>
-                    <td className="p-4 border-b border-gray-200">{orden.producto}</td>
-                    <td className="p-4 border-b border-gray-200">
-                      <span className="font-semibold text-teal-600">Semana {orden.semana}</span>
+                    <td 
+                      className="p-4 border-b"
+                      style={{ 
+                        borderColor: theme === 'dark' ? '#374151' : '#e5e7eb',
+                        color: theme === 'dark' ? '#e5e7eb' : '#111827'
+                      }}
+                    >
+                      <strong>{orden.id}</strong>
                     </td>
-                    <td className="p-4 border-b border-gray-200">{formatNumber(orden.plan)}</td>
-                    <td className="p-4 border-b border-gray-200">{formatNumber(orden.real)}</td>
-                    <td className="p-4 border-b border-gray-200">
+                    <td 
+                      className="p-4 border-b"
+                      style={{ 
+                        borderColor: theme === 'dark' ? '#374151' : '#e5e7eb',
+                        color: theme === 'dark' ? '#e5e7eb' : '#111827'
+                      }}
+                    >
+                      {orden.producto}
+                    </td>
+                    <td 
+                      className="p-4 border-b"
+                      style={{ 
+                        borderColor: theme === 'dark' ? '#374151' : '#e5e7eb'
+                      }}
+                    >
+                      <span 
+                        className="font-semibold"
+                        style={{ color: theme === 'dark' ? '#2dd4bf' : '#0d9488' }}
+                      >
+                        Semana {orden.semana}
+                      </span>
+                    </td>
+                    <td 
+                      className="p-4 border-b"
+                      style={{ 
+                        borderColor: theme === 'dark' ? '#374151' : '#e5e7eb',
+                        color: theme === 'dark' ? '#e5e7eb' : '#111827'
+                      }}
+                    >
+                      {formatNumber(orden.plan)}
+                    </td>
+                    <td 
+                      className="p-4 border-b"
+                      style={{ 
+                        borderColor: theme === 'dark' ? '#374151' : '#e5e7eb',
+                        color: theme === 'dark' ? '#e5e7eb' : '#111827'
+                      }}
+                    >
+                      {formatNumber(orden.real)}
+                    </td>
+                    <td 
+                      className="p-4 border-b"
+                      style={{ 
+                        borderColor: theme === 'dark' ? '#374151' : '#e5e7eb'
+                      }}
+                    >
                       <div className="space-y-2">
                         <div className="flex items-center gap-2">
                           <span className={`badge ${getEstadoBadgeClass(orden.estado)}`}>{orden.estado}</span>
-                          <span className="text-sm font-semibold text-gray-600">{progreso}%</span>
+                          <span 
+                            className="text-sm font-semibold"
+                            style={{ color: theme === 'dark' ? '#d1d5db' : '#111827' }}
+                          >
+                            {progreso}%
+                          </span>
                         </div>
-                        <div className="w-full h-2 bg-gray-200 rounded-full overflow-hidden">
+                        <div 
+                          className="w-full h-2 rounded-full overflow-hidden"
+                          style={{ backgroundColor: theme === 'dark' ? '#374151' : '#e5e7eb' }}
+                        >
                           <div
                             className={`h-full ${progresoColor} rounded-full transition-all`}
                             style={{ width: `${Math.min(100, progreso)}%` }}
@@ -300,7 +457,15 @@ export default function LineaPage({ params }: { params: Promise<{ lineaId: strin
                         </div>
                       </div>
                     </td>
-                    <td className="p-4 border-b border-gray-200">{orden.fechaCompromiso}</td>
+                    <td 
+                      className="p-4 border-b"
+                      style={{ 
+                        borderColor: theme === 'dark' ? '#374151' : '#e5e7eb',
+                        color: theme === 'dark' ? '#e5e7eb' : '#111827'
+                      }}
+                    >
+                      {orden.fechaCompromiso}
+                    </td>
                   </tr>
                 )
               })}
@@ -310,18 +475,36 @@ export default function LineaPage({ params }: { params: Promise<{ lineaId: strin
       </div>
 
       <div className="card">
-        <div className="flex justify-between items-center mb-6 pb-4 border-b-2 border-gray-200">
-          <h3 className="text-xl font-semibold">Timeline de Eventos</h3>
+        <div 
+          className="flex justify-between items-center mb-6 pb-4 border-b-2"
+          style={{ borderColor: theme === 'dark' ? '#374151' : '#e5e7eb' }}
+        >
+          <h3 
+            className="text-xl font-semibold"
+            style={{ color: theme === 'dark' ? '#f9fafb' : '#111827' }}
+          >
+            Timeline de Eventos
+          </h3>
         </div>
         
         {/* Filtros */}
         <div className="mb-6 flex gap-4 flex-wrap">
           <div className="flex items-center gap-2">
-            <label className="text-sm font-semibold">Tipo:</label>
+            <label 
+              className="text-sm font-semibold"
+              style={{ color: theme === 'dark' ? '#d1d5db' : '#374151' }}
+            >
+              Tipo:
+            </label>
             <select
               value={filterTipoEvento}
               onChange={(e) => setFilterTipoEvento(e.target.value as 'todos' | 'produccion' | 'paradas')}
-              className="px-3 py-2 border-2 border-gray-200 rounded-lg text-sm"
+              className="px-3 py-2 border-2 rounded-lg text-sm"
+              style={{
+                borderColor: theme === 'dark' ? '#4b5563' : '#d1d5db',
+                backgroundColor: theme === 'dark' ? '#374151' : 'white',
+                color: theme === 'dark' ? '#f9fafb' : '#111827'
+              }}
             >
               <option value="todos">Todos</option>
               <option value="produccion">Producción</option>
@@ -329,11 +512,21 @@ export default function LineaPage({ params }: { params: Promise<{ lineaId: strin
             </select>
           </div>
           <div className="flex items-center gap-2">
-            <label className="text-sm font-semibold">Fecha:</label>
+            <label 
+              className="text-sm font-semibold"
+              style={{ color: theme === 'dark' ? '#d1d5db' : '#374151' }}
+            >
+              Fecha:
+            </label>
             <select
               value={filterFecha}
               onChange={(e) => setFilterFecha(e.target.value)}
-              className="px-3 py-2 border-2 border-gray-200 rounded-lg text-sm"
+              className="px-3 py-2 border-2 rounded-lg text-sm"
+              style={{
+                borderColor: theme === 'dark' ? '#4b5563' : '#d1d5db',
+                backgroundColor: theme === 'dark' ? '#374151' : 'white',
+                color: theme === 'dark' ? '#f9fafb' : '#111827'
+              }}
             >
               <option value="">Todas</option>
               {fechasUnicas.map(fecha => (
@@ -348,25 +541,44 @@ export default function LineaPage({ params }: { params: Promise<{ lineaId: strin
             timelineFiltrado.map((item, index) => (
               <li 
                 key={index} 
-                className={`p-4 mb-3 border-l-4 pl-6 rounded-lg ${
-                  item.tipo === 'produccion' 
-                    ? 'bg-blue-50 border-l-blue-500' 
-                    : 'bg-orange-50 border-l-orange-500'
-                }`}
+                className="p-4 mb-3 border-l-4 pl-6 rounded-lg"
+                style={{
+                  backgroundColor: item.tipo === 'produccion' 
+                    ? (theme === 'dark' ? 'rgba(30, 58, 138, 0.2)' : '#eff6ff')
+                    : (theme === 'dark' ? 'rgba(154, 52, 18, 0.2)' : '#fff7ed'),
+                  borderLeftColor: item.tipo === 'produccion' 
+                    ? (theme === 'dark' ? '#60a5fa' : '#3b82f6')
+                    : (theme === 'dark' ? '#fb923c' : '#f97316')
+                }}
               >
                 <div className="flex items-start gap-3">
                   <div className="flex-shrink-0">
-                    <div className="text-sm font-semibold text-gray-700">{item.fecha}</div>
-                    <div className="text-lg font-bold text-[#14B8A6]">{item.hora}</div>
+                    <div 
+                      className="text-sm font-semibold"
+                      style={{ color: theme === 'dark' ? '#d1d5db' : '#111827' }}
+                    >
+                      {item.fecha}
+                    </div>
+                    <div 
+                      className="text-lg font-bold"
+                      style={{ color: theme === 'dark' ? '#2dd4bf' : '#14b8a6' }}
+                    >
+                      {item.hora}
+                    </div>
                   </div>
                   <div className="flex-1">
-                    <span className="text-gray-800">{item.descripcion}</span>
+                    <span style={{ color: theme === 'dark' ? '#e5e7eb' : '#111827' }}>
+                      {item.descripcion}
+                    </span>
                   </div>
                 </div>
               </li>
             ))
           ) : (
-            <li className="p-4 text-center text-gray-500">
+            <li 
+              className="p-4 text-center"
+              style={{ color: theme === 'dark' ? '#9ca3af' : '#6b7280' }}
+            >
               No hay eventos que coincidan con los filtros seleccionados
             </li>
           )}

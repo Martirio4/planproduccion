@@ -2,6 +2,7 @@
 
 import { useApp } from '@/context/AppContext'
 import { useToast } from '@/components/Toast'
+import { useTheme } from '@/context/ThemeContext'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import { useState } from 'react'
@@ -10,6 +11,7 @@ import CargarPlanModal from '@/components/CargarPlanModal'
 
 export default function DashboardPage() {
   const { state, updateState } = useApp()
+  const { theme } = useTheme()
   const router = useRouter()
   const [viewMode, setViewMode] = useState<'gantt' | 'gauge'>('gantt')
   const [isModalOpen, setIsModalOpen] = useState(false)
@@ -121,25 +123,47 @@ export default function DashboardPage() {
       <div className="mb-8">
         <div className="flex justify-between items-start mb-4">
           <div>
-            <h2 className="text-3xl font-bold mb-2">
+            <h2 
+              className="text-3xl font-bold mb-2"
+              style={{ color: theme === 'dark' ? '#f9fafb' : '#111827' }}
+            >
               Semana {semanaSeleccionada} · {state.planta}
             </h2>
-            <p className="text-gray-600 mb-1">
+            <p 
+              className="mb-1"
+              style={{ color: theme === 'dark' ? '#9ca3af' : '#4b5563' }}
+            >
               {formatDateShort(semanaStart)} - {formatDateShort(semanaEnd)}
             </p>
-            <p className="text-gray-600 mb-4">Última actualización: {formatDate(state.ultimaActualizacion)}</p>
+            <p 
+              className="mb-4"
+              style={{ color: theme === 'dark' ? '#9ca3af' : '#4b5563' }}
+            >
+              Última actualización: {formatDate(state.ultimaActualizacion)}
+            </p>
           </div>
           <div>
-            <label className="block text-sm font-semibold text-gray-700 mb-2">
+            <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
               Seleccionar Semana
             </label>
             <select
               value={semanaSeleccionada}
               onChange={(e) => handleCambiarSemana(parseInt(e.target.value))}
-              className="px-4 py-2 border-2 border-gray-200 rounded-lg focus:border-teal-500 focus:outline-none"
+              className="px-4 py-2 border-2 border-gray-200 dark:border-gray-600 rounded-lg focus:border-teal-500 focus:outline-none"
+              style={{ 
+                backgroundColor: theme === 'dark' ? '#374151' : '#ffffff',
+                color: theme === 'dark' ? '#f9fafb' : '#111827'
+              }}
             >
               {semanasDisponibles.map((sem) => (
-                <option key={sem.numero} value={sem.numero}>
+                <option 
+                  key={sem.numero} 
+                  value={sem.numero}
+                  style={{ 
+                    backgroundColor: theme === 'dark' ? '#374151' : '#ffffff',
+                    color: theme === 'dark' ? '#f9fafb' : '#111827'
+                  }}
+                >
                   Semana {sem.numero} ({formatDateShort(sem.inicio)} - {formatDateShort(sem.fin)})
                 </option>
               ))}
@@ -150,33 +174,78 @@ export default function DashboardPage() {
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
         <div className="kpi-card">
-          <h4 className="text-sm font-semibold text-gray-500 uppercase tracking-wide mb-2">Plan Semanal</h4>
-          <div className="text-3xl font-bold">{formatNumber(planSemanal)} t</div>
+          <h4 
+            className="text-sm font-semibold uppercase tracking-wide mb-2"
+            style={{ color: theme === 'dark' ? '#9ca3af' : '#374151' }}
+          >
+            Plan Semanal
+          </h4>
+          <div 
+            className="text-3xl font-bold"
+            style={{ color: theme === 'dark' ? '#f9fafb' : '#111827' }}
+          >
+            {formatNumber(planSemanal)} t
+          </div>
         </div>
         <div className="kpi-card">
-          <h4 className="text-sm font-semibold text-gray-500 uppercase tracking-wide mb-2">Real Acumulado</h4>
-          <div className="text-3xl font-bold">{formatNumber(realAcumulado)} t</div>
+          <h4 
+            className="text-sm font-semibold uppercase tracking-wide mb-2"
+            style={{ color: theme === 'dark' ? '#9ca3af' : '#374151' }}
+          >
+            Real Acumulado
+          </h4>
+          <div 
+            className="text-3xl font-bold"
+            style={{ color: theme === 'dark' ? '#f9fafb' : '#111827' }}
+          >
+            {formatNumber(realAcumulado)} t
+          </div>
         </div>
         <div className={`kpi-card ${cumplimiento >= 80 ? 'success' : cumplimiento >= 60 ? 'warning' : 'danger'}`}>
-          <h4 className="text-sm font-semibold text-gray-500 uppercase tracking-wide mb-2">% Cumplimiento</h4>
-          <div className="text-3xl font-bold">{cumplimiento}%</div>
+          <h4 
+            className="text-sm font-semibold uppercase tracking-wide mb-2"
+            style={{ color: theme === 'dark' ? '#9ca3af' : '#374151' }}
+          >
+            % Cumplimiento
+          </h4>
+          <div 
+            className="text-3xl font-bold"
+            style={{ color: theme === 'dark' ? '#f9fafb' : '#111827' }}
+          >
+            {cumplimiento}%
+          </div>
         </div>
         <div className={`kpi-card ${ordenesSemana.filter(o => o.estado === 'Atrasado').length > 0 ? 'danger' : 'success'}`}>
-          <h4 className="text-sm font-semibold text-gray-500 uppercase tracking-wide mb-2">Retrasos</h4>
-          <div className="text-3xl font-bold">{ordenesSemana.filter(o => o.estado === 'Atrasado').length}</div>
+          <h4 
+            className="text-sm font-semibold uppercase tracking-wide mb-2"
+            style={{ color: theme === 'dark' ? '#9ca3af' : '#374151' }}
+          >
+            Retrasos
+          </h4>
+          <div 
+            className="text-3xl font-bold"
+            style={{ color: theme === 'dark' ? '#f9fafb' : '#111827' }}
+          >
+            {ordenesSemana.filter(o => o.estado === 'Atrasado').length}
+          </div>
         </div>
       </div>
 
       <div className="card mb-8">
-        <div className="flex justify-between items-center mb-6 pb-4 border-b-2 border-gray-200">
-          <h3 className="text-xl font-semibold">Programación Semanal por Línea</h3>
+        <div className="flex justify-between items-center mb-6 pb-4 border-b-2 border-gray-200 dark:border-gray-700">
+          <h3 
+            className="text-xl font-semibold"
+            style={{ color: theme === 'dark' ? '#f9fafb' : '#111827' }}
+          >
+            Programación Semanal por Línea
+          </h3>
           <div className="flex items-center gap-2">
             <button
               onClick={() => setViewMode('gantt')}
               className={`flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-semibold transition-all ${
                 viewMode === 'gantt'
                   ? 'bg-gradient-to-r from-teal-500 to-teal-600 text-white shadow-md'
-                  : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
+                  : 'bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-300 dark:hover:bg-gray-600'
               }`}
               title="Vista de barras"
             >
@@ -192,7 +261,7 @@ export default function DashboardPage() {
               className={`flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-semibold transition-all ${
                 viewMode === 'gauge'
                   ? 'bg-gradient-to-r from-teal-500 to-teal-600 text-white shadow-md'
-                  : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
+                  : 'bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-300 dark:hover:bg-gray-600'
               }`}
               title="Vista de indicadores"
             >
@@ -209,7 +278,13 @@ export default function DashboardPage() {
             // Vista Gantt
             <div>
               {/* Indicador de semana con chevrons */}
-              <div className="mb-4 p-3 bg-gray-50 border border-gray-200 rounded-lg">
+              <div 
+                className="mb-4 p-3 border rounded-lg"
+                style={{ 
+                  backgroundColor: theme === 'dark' ? '#1f2937' : '#ffffff',
+                  borderColor: theme === 'dark' ? '#4b5563' : '#e5e7eb'
+                }}
+              >
                 <div className="flex items-center justify-between gap-3">
                   <div className="flex items-center justify-center gap-3 flex-1">
                     <button
@@ -231,7 +306,10 @@ export default function DashboardPage() {
                         <path d="M15 18l-6-6 6-6"/>
                       </svg>
                     </button>
-                    <div className="text-sm text-gray-700">
+                    <div 
+                      className="text-sm"
+                      style={{ color: theme === 'dark' ? '#d1d5db' : '#374151' }}
+                    >
                       <span className="font-semibold">Semana {semanaSeleccionada}</span>
                       <span className="mx-2">·</span>
                       <span>{formatDateShort(semanaStart)} - {formatDateShort(semanaEnd)}</span>
@@ -278,21 +356,41 @@ export default function DashboardPage() {
               <Link
                 key={linea.id}
                 href={`/admin/linea/${linea.id}`}
-                className="block p-5 mb-4 border-2 border-gray-200 rounded-lg cursor-pointer transition-all hover:shadow-md hover:-translate-y-0.5"
-                style={{ borderLeftColor: color.from, borderLeftWidth: '4px' }}
+                className="block p-5 mb-4 rounded-lg cursor-pointer transition-all hover:shadow-md hover:-translate-y-0.5"
+                style={{ 
+                  borderLeftColor: color.from, 
+                  borderLeftWidth: '6px',
+                  backgroundColor: theme === 'dark' ? '#1f2937' : '#ffffff',
+                  borderTop: theme === 'dark' ? '2px solid #4b5563' : '2px solid #e5e7eb',
+                  borderRight: theme === 'dark' ? '2px solid #4b5563' : '2px solid #e5e7eb',
+                  borderBottom: theme === 'dark' ? '2px solid #4b5563' : '2px solid #e5e7eb'
+                }}
               >
                 <div className="flex justify-between items-center mb-3">
-                  <span className="text-lg font-semibold">{linea.nombre}</span>
+                  <span 
+                    className="text-lg font-semibold"
+                    style={{ color: theme === 'dark' ? '#f9fafb' : '#111827' }}
+                  >
+                    {linea.nombre}
+                  </span>
                   <div className="text-right">
                     <div className="text-base font-bold" style={{ color: color.from }}>
                       {linea.cumplimiento}%
                     </div>
-                    <div className="text-sm text-gray-600">
+                    <div 
+                      className="text-sm"
+                      style={{ color: theme === 'dark' ? '#9ca3af' : '#4b5563' }}
+                    >
                       {formatNumber(linea.real)} / {formatNumber(linea.plan)} t
                     </div>
                   </div>
                 </div>
-                <div className="w-full h-8 bg-gray-100 rounded-lg overflow-hidden relative">
+                <div 
+                  className="w-full h-8 rounded-lg overflow-hidden relative"
+                  style={{ 
+                    backgroundColor: theme === 'dark' ? '#374151' : '#e5e7eb'
+                  }}
+                >
                   <div
                     className="h-full rounded-lg transition-all flex items-center justify-end pr-2 text-white text-sm font-semibold"
                     style={{ 
@@ -325,7 +423,12 @@ export default function DashboardPage() {
                     className="card cursor-pointer hover:border-teal-500 hover:shadow-lg transition-all text-center"
                     style={{ borderTopColor: color.from, borderTopWidth: '4px' }}
                   >
-                    <h4 className="text-lg font-semibold mb-4">{linea.nombre}</h4>
+                    <h4 
+                      className="text-lg font-semibold mb-4"
+                      style={{ color: theme === 'dark' ? '#f9fafb' : '#111827' }}
+                    >
+                      {linea.nombre}
+                    </h4>
                     <div className="flex justify-center mb-4">
                       <Gauge porcentaje={linea.cumplimiento} color={color.from} size={140} />
                     </div>
@@ -333,7 +436,10 @@ export default function DashboardPage() {
                       <div className="text-2xl font-bold" style={{ color: color.from }}>
                         {formatNumber(linea.real)} t
                       </div>
-                      <div className="text-sm text-gray-600">
+                      <div 
+                        className="text-sm"
+                        style={{ color: theme === 'dark' ? '#9ca3af' : '#4b5563' }}
+                      >
                         de {formatNumber(linea.plan)} t
                       </div>
                     </div>
@@ -345,24 +451,39 @@ export default function DashboardPage() {
       </div>
 
       <div className="card">
-        <div className="flex justify-between items-center mb-6 pb-4 border-b-2 border-gray-200">
-          <h3 className="text-xl font-semibold">Alertas</h3>
+        <div className="flex justify-between items-center mb-6 pb-4 border-b-2 border-gray-200 dark:border-gray-700">
+          <h3 
+            className="text-xl font-semibold"
+            style={{ color: theme === 'dark' ? '#f9fafb' : '#111827' }}
+          >
+            Alertas
+          </h3>
         </div>
         {state.alertas.map((alerta, index) => (
           <div
             key={index}
-            className={`flex gap-4 p-4 mb-3 border-l-4 rounded-lg ${
-              alerta.tipo === 'danger' 
-                ? 'bg-red-50 border-l-red-500' 
-                : alerta.tipo === 'success'
-                ? 'bg-green-50 border-l-green-500'
-                : 'bg-yellow-50 border-l-yellow-500'
-            }`}
+            className="flex gap-4 p-4 mb-3 border-l-4 rounded-lg"
+            style={{
+              backgroundColor: theme === 'dark' 
+                ? (alerta.tipo === 'danger' ? 'rgba(127, 29, 29, 0.2)' : alerta.tipo === 'success' ? 'rgba(20, 83, 45, 0.2)' : 'rgba(120, 53, 15, 0.2)')
+                : (alerta.tipo === 'danger' ? '#fef2f2' : alerta.tipo === 'success' ? '#f0fdf4' : '#fffbeb'),
+              borderLeftColor: alerta.tipo === 'danger' ? '#ef4444' : alerta.tipo === 'success' ? '#22c55e' : '#eab308'
+            }}
           >
             <div className="text-2xl">{alerta.icono}</div>
             <div>
-              <h5 className="font-semibold mb-1">{alerta.titulo}</h5>
-              <p className="text-sm text-gray-600">{alerta.descripcion}</p>
+              <h5 
+                className="font-semibold mb-1"
+                style={{ color: theme === 'dark' ? '#f9fafb' : '#111827' }}
+              >
+                {alerta.titulo}
+              </h5>
+              <p 
+                className="text-sm"
+                style={{ color: theme === 'dark' ? '#9ca3af' : '#4b5563' }}
+              >
+                {alerta.descripcion}
+              </p>
             </div>
           </div>
         ))}

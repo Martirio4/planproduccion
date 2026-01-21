@@ -1,13 +1,16 @@
 'use client'
 
 import { useApp } from '@/context/AppContext'
+import { useTheme } from '@/context/ThemeContext'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { useToast } from '@/components/Toast'
 import { useState, use, useEffect } from 'react'
 import Link from 'next/link'
+import { Gauge } from '@/components/Gauge'
 
 export default function OrdenOperarioPage({ params }: { params: Promise<{ maquinaId: string; ordenId: string }> }) {
   const { state, updateState } = useApp()
+  const { theme } = useTheme()
   const router = useRouter()
   const searchParams = useSearchParams()
   const { showToast } = useToast()
@@ -40,6 +43,9 @@ export default function OrdenOperarioPage({ params }: { params: Promise<{ maquin
   const linea = state.lineas[orden.lineaId]
   const progreso = Math.round((orden.real / orden.plan) * 100)
   const progresoColor = progreso >= 80 ? 'bg-green-500' : progreso >= 60 ? 'bg-yellow-500' : 'bg-red-500'
+  const cantidadRestante = orden.plan - orden.real
+  const porcentajeRestante = cantidadRestante > 0 ? Math.round((cantidadRestante / orden.plan) * 100) : 0
+  const cumplimientoColor = progreso >= 80 ? 'success' : progreso >= 60 ? 'warning' : 'danger'
 
   // Estados para formularios
   const [kg, setKg] = useState('')
@@ -192,66 +198,158 @@ export default function OrdenOperarioPage({ params }: { params: Promise<{ maquin
   return (
     <div>
       <div className="mb-8">
-        <h2 className="text-3xl font-bold mb-2">Orden: {orden.id}</h2>
-        <p className="text-gray-600 mb-4">Máquina: {maquinaId} · {linea.nombre}</p>
+        <h2 
+          className="text-3xl font-bold mb-2"
+          style={{ color: theme === 'dark' ? '#f9fafb' : '#111827' }}
+        >
+          Orden: {orden.id}
+        </h2>
+        <p 
+          className="mb-4"
+          style={{ color: theme === 'dark' ? '#9ca3af' : '#374151' }}
+        >
+          Máquina: {maquinaId} · {linea.nombre}
+        </p>
         <Link href={`/operario/maquina/${maquinaId}`} className="btn btn-secondary">
           ← Volver a órdenes
         </Link>
       </div>
 
-      {/* Resumen de la orden */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+      {/* 3 cards superiores: Producto y Estado */}
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
         <div className="card">
-          <label className="text-sm font-semibold text-gray-500 mb-2 block">Producto</label>
-          <div className="text-xl font-semibold">{orden.producto}</div>
+          <label 
+            className="text-sm font-semibold mb-2 block"
+            style={{ color: theme === 'dark' ? '#9ca3af' : '#374151' }}
+          >
+            Producto
+          </label>
+          <div 
+            className="text-xl font-semibold"
+            style={{ color: theme === 'dark' ? '#f9fafb' : '#111827' }}
+          >
+            {orden.producto}
+          </div>
         </div>
         <div className="card">
-          <label className="text-sm font-semibold text-gray-500 mb-2 block">Objetivo</label>
-          <div className="text-xl font-semibold">{formatNumber(orden.plan)} kg</div>
-        </div>
-        <div className="card">
-          <label className="text-sm font-semibold text-gray-500 mb-2 block">Real Acumulado</label>
-          <div className="text-xl font-semibold">{formatNumber(orden.real)} kg</div>
-        </div>
-        <div className="card">
-          <label className="text-sm font-semibold text-gray-500 mb-2 block">Estado</label>
+          <label 
+            className="text-sm font-semibold mb-2 block"
+            style={{ color: theme === 'dark' ? '#9ca3af' : '#374151' }}
+          >
+            Estado
+          </label>
           <div>
             <span className={`badge ${getEstadoBadgeClass(orden.estado)}`}>{orden.estado}</span>
           </div>
         </div>
       </div>
 
-      {/* Barra de progreso */}
-      <div className="card mb-8">
-        <label className="text-sm font-semibold text-gray-500 mb-2 block">% Progreso</label>
-        <div className="w-full h-8 bg-gray-100 rounded-lg overflow-hidden mt-2">
-          <div
-            className={`h-full ${progresoColor} rounded-lg flex items-center justify-center text-white text-sm font-semibold transition-all`}
-            style={{ width: `${Math.min(100, progreso)}%` }}
-          >
-            {progreso}%
+      {/* Layout con 2 cards apiladas y gauges */}
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+        {/* Tarjetas apiladas para Plan y Real */}
+        <div className="md:col-span-2 space-y-4">
+          {/* Plan/Objetivo */}
+          <div className="kpi-card">
+            <h4 
+              className="text-sm font-semibold uppercase tracking-wide mb-3"
+              style={{ color: theme === 'dark' ? '#9ca3af' : '#374151' }}
+            >
+              Objetivo
+            </h4>
+            <div className="flex items-end justify-between">
+              <div 
+                className="text-3xl font-bold"
+                style={{ color: theme === 'dark' ? '#f9fafb' : '#111827' }}
+              >
+                {formatNumber(orden.plan)} kg
+              </div>
+            </div>
+            <div 
+              className="mt-4 w-full h-3 rounded-full overflow-hidden"
+              style={{ backgroundColor: theme === 'dark' ? '#374151' : '#e5e7eb' }}
+            >
+              <div
+                className="h-full bg-blue-500 rounded-full transition-all"
+                style={{ width: '100%' }}
+              />
+            </div>
+          </div>
+          
+          {/* Real */}
+          <div className="kpi-card">
+            <h4 
+              className="text-sm font-semibold uppercase tracking-wide mb-3"
+              style={{ color: theme === 'dark' ? '#9ca3af' : '#374151' }}
+            >
+              Real Acumulado
+            </h4>
+            <div className="flex items-end justify-between">
+              <div 
+                className="text-3xl font-bold"
+                style={{ color: theme === 'dark' ? '#f9fafb' : '#111827' }}
+              >
+                {formatNumber(orden.real)} kg
+              </div>
+            </div>
+            <div 
+              className="mt-4 w-full h-3 rounded-full overflow-hidden"
+              style={{ backgroundColor: theme === 'dark' ? '#374151' : '#e5e7eb' }}
+            >
+              <div
+                className={`h-full rounded-full transition-all ${progresoColor}`}
+                style={{ width: `${Math.min(100, progreso)}%` }}
+              />
+            </div>
           </div>
         </div>
-        <div className="mt-2 text-sm text-gray-600">
-          {formatNumber(orden.real)} / {formatNumber(orden.plan)} kg
-          {orden.real < orden.plan && (
-            <span className="ml-2 text-[#14B8A6]">
-              (Faltan {formatNumber(orden.plan - orden.real)} kg)
-            </span>
-          )}
+
+        {/* Gauge de cumplimiento */}
+        <div className="kpi-card flex flex-col items-center justify-center">
+          <h4 
+            className="text-sm font-semibold uppercase tracking-wide mb-4"
+            style={{ color: theme === 'dark' ? '#9ca3af' : '#374151' }}
+          >
+            % Cumplimiento
+          </h4>
+          <Gauge 
+            porcentaje={progreso} 
+            color={cumplimientoColor === 'success' ? '#10B981' : cumplimientoColor === 'warning' ? '#F59E0B' : '#EF4444'}
+            size={140}
+          />
+          <div 
+            className="mt-4 text-center"
+            style={{ color: theme === 'dark' ? '#9ca3af' : '#374151' }}
+          >
+            <div className="text-sm font-semibold mb-1">Cantidad Restante</div>
+            <div 
+              className="text-xl font-bold"
+              style={{ color: theme === 'dark' ? '#f9fafb' : '#111827' }}
+            >
+              {formatNumber(cantidadRestante)} kg
+            </div>
+          </div>
         </div>
       </div>
 
       {/* Formulario directo - sin redundancias */}
       <div className="card mb-8">
         {/* Tabs simples solo para cambiar entre Producción y Parada */}
-        <div className="flex gap-2 mb-6 border-b-2 border-gray-200">
+        <div 
+          className="flex gap-2 mb-6 border-b-2"
+          style={{ borderColor: theme === 'dark' ? '#374151' : '#e5e7eb' }}
+        >
           <button
             onClick={() => {
               setActiveTab('produccion')
               router.replace(`/operario/maquina/${maquinaId}/orden/${ordenId}?accion=produccion`)
             }}
             className={`tab ${activeTab === 'produccion' ? 'active' : ''}`}
+            style={{
+              color: activeTab === 'produccion' 
+                ? '#14B8A6' 
+                : (theme === 'dark' ? '#9ca3af' : '#374151'),
+              borderBottomColor: activeTab === 'produccion' ? '#14B8A6' : 'transparent'
+            }}
           >
             📊 Producción
           </button>
@@ -261,6 +359,12 @@ export default function OrdenOperarioPage({ params }: { params: Promise<{ maquin
               router.replace(`/operario/maquina/${maquinaId}/orden/${ordenId}?accion=parada`)
             }}
             className={`tab ${activeTab === 'parada' ? 'active' : ''}`}
+            style={{
+              color: activeTab === 'parada' 
+                ? '#14B8A6' 
+                : (theme === 'dark' ? '#9ca3af' : '#374151'),
+              borderBottomColor: activeTab === 'parada' ? '#14B8A6' : 'transparent'
+            }}
           >
             ⏸️ Parada
           </button>
@@ -420,42 +524,105 @@ export default function OrdenOperarioPage({ params }: { params: Promise<{ maquin
       {/* Historial reciente */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         <div className="card">
-          <h3 className="text-xl font-semibold mb-4">Últimas Producciones</h3>
+          <h3 
+            className="text-xl font-semibold mb-4"
+            style={{ color: theme === 'dark' ? '#f9fafb' : '#111827' }}
+          >
+            Últimas Producciones
+          </h3>
           <div className="space-y-3">
             {orden.registrosProduccion.slice(-5).reverse().map((reg, index) => (
-              <div key={index} className="p-3 bg-gray-50 rounded-lg">
+              <div 
+                key={index} 
+                className="p-3 rounded-lg"
+                style={{ backgroundColor: theme === 'dark' ? '#1f2937' : '#f3f4f6' }}
+              >
                 <div className="flex justify-between items-center">
-                  <span className="font-semibold text-[#14B8A6]">{reg.hora}</span>
-                  <span className="font-bold">+{formatNumber(reg.kg)} kg</span>
+                  <span 
+                    className="font-semibold"
+                    style={{ color: '#14B8A6' }}
+                  >
+                    {reg.hora}
+                  </span>
+                  <span 
+                    className="font-bold"
+                    style={{ color: theme === 'dark' ? '#f9fafb' : '#111827' }}
+                  >
+                    +{formatNumber(reg.kg)} kg
+                  </span>
                 </div>
                 {reg.comentarios && (
-                  <p className="text-sm text-gray-600 mt-1">{reg.comentarios}</p>
+                  <p 
+                    className="text-sm mt-1"
+                    style={{ color: theme === 'dark' ? '#9ca3af' : '#6b7280' }}
+                  >
+                    {reg.comentarios}
+                  </p>
                 )}
               </div>
             ))}
             {orden.registrosProduccion.length === 0 && (
-              <p className="text-gray-500 text-center py-4">No hay registros de producción</p>
+              <p 
+                className="text-center py-4"
+                style={{ color: theme === 'dark' ? '#9ca3af' : '#6b7280' }}
+              >
+                No hay registros de producción
+              </p>
             )}
           </div>
         </div>
 
         <div className="card">
-          <h3 className="text-xl font-semibold mb-4">Últimas Paradas</h3>
+          <h3 
+            className="text-xl font-semibold mb-4"
+            style={{ color: theme === 'dark' ? '#f9fafb' : '#111827' }}
+          >
+            Últimas Paradas
+          </h3>
           <div className="space-y-3">
             {orden.registrosParadas.slice(-5).reverse().map((parada, index) => (
-              <div key={index} className="p-3 bg-gray-50 rounded-lg">
+              <div 
+                key={index} 
+                className="p-3 rounded-lg"
+                style={{ backgroundColor: theme === 'dark' ? '#1f2937' : '#f3f4f6' }}
+              >
                 <div className="flex justify-between items-center mb-1">
-                  <span className="font-semibold text-[#14B8A6]">{parada.inicio} - {parada.fin}</span>
-                  <span className="text-sm text-gray-600">{parada.duracion} min</span>
+                  <span 
+                    className="font-semibold"
+                    style={{ color: '#14B8A6' }}
+                  >
+                    {parada.inicio} - {parada.fin}
+                  </span>
+                  <span 
+                    className="text-sm"
+                    style={{ color: theme === 'dark' ? '#9ca3af' : '#6b7280' }}
+                  >
+                    {parada.duracion} min
+                  </span>
                 </div>
-                <div className="font-semibold">{parada.motivo}</div>
+                <div 
+                  className="font-semibold"
+                  style={{ color: theme === 'dark' ? '#f9fafb' : '#111827' }}
+                >
+                  {parada.motivo}
+                </div>
                 {parada.comentarios && (
-                  <p className="text-sm text-gray-600 mt-1">{parada.comentarios}</p>
+                  <p 
+                    className="text-sm mt-1"
+                    style={{ color: theme === 'dark' ? '#9ca3af' : '#6b7280' }}
+                  >
+                    {parada.comentarios}
+                  </p>
                 )}
               </div>
             ))}
             {orden.registrosParadas.length === 0 && (
-              <p className="text-gray-500 text-center py-4">No hay registros de paradas</p>
+              <p 
+                className="text-center py-4"
+                style={{ color: theme === 'dark' ? '#9ca3af' : '#6b7280' }}
+              >
+                No hay registros de paradas
+              </p>
             )}
           </div>
         </div>

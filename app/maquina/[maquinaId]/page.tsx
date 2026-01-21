@@ -54,23 +54,23 @@ export default function MaquinaPage({ params }: { params: Promise<{ maquinaId: s
       <div className="card mb-8">
         <h3 className="text-xl font-semibold mb-4">Contexto Actual</h3>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4">
-          <div className="p-3 bg-gray-50 rounded-lg">
+          <div className="p-3 bg-gray-50 dark:bg-gray-800 rounded-lg">
             <label className="text-xs text-gray-500 block mb-1">Turno</label>
             <div className="text-lg font-semibold">{maquina.turno}</div>
           </div>
-          <div className="p-3 bg-gray-50 rounded-lg">
+          <div className="p-3 bg-gray-50 dark:bg-gray-800 rounded-lg">
             <label className="text-xs text-gray-500 block mb-1">Producto</label>
             <div className="text-lg font-semibold">{orden ? orden.producto : maquina.producto}</div>
           </div>
-          <div className="p-3 bg-gray-50 rounded-lg">
+          <div className="p-3 bg-gray-50 dark:bg-gray-800 rounded-lg">
             <label className="text-xs text-gray-500 block mb-1">Lote Actual</label>
             <div className="text-lg font-semibold">{maquina.ordenId}</div>
           </div>
-          <div className="p-3 bg-gray-50 rounded-lg">
+          <div className="p-3 bg-gray-50 dark:bg-gray-800 rounded-lg">
             <label className="text-xs text-gray-500 block mb-1">Objetivo Turno</label>
             <div className="text-lg font-semibold">{formatNumber(maquina.objetivoTurno)} kg</div>
           </div>
-          <div className="p-3 bg-gray-50 rounded-lg">
+          <div className="p-3 bg-gray-50 dark:bg-gray-800 rounded-lg">
             <label className="text-xs text-gray-500 block mb-1">Producido Actual</label>
             <div className="text-lg font-semibold">{formatNumber(maquina.producidoActual)} kg</div>
           </div>
