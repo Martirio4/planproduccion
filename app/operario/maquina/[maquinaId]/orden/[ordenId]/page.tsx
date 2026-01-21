@@ -339,9 +339,11 @@ export default function OrdenOperarioPage({ params }: { params: Promise<{ maquin
           style={{ borderColor: theme === 'dark' ? '#374151' : '#e5e7eb' }}
         >
           <button
-            onClick={() => {
+            type="button"
+            onClick={(e) => {
+              e.preventDefault()
+              e.stopPropagation()
               setActiveTab('produccion')
-              router.replace(`/operario/maquina/${maquinaId}/orden/${ordenId}?accion=produccion`)
             }}
             className={`tab ${activeTab === 'produccion' ? 'active' : ''}`}
             style={{
@@ -354,9 +356,11 @@ export default function OrdenOperarioPage({ params }: { params: Promise<{ maquin
             📊 Producción
           </button>
           <button
-            onClick={() => {
+            type="button"
+            onClick={(e) => {
+              e.preventDefault()
+              e.stopPropagation()
               setActiveTab('parada')
-              router.replace(`/operario/maquina/${maquinaId}/orden/${ordenId}?accion=parada`)
             }}
             className={`tab ${activeTab === 'parada' ? 'active' : ''}`}
             style={{
